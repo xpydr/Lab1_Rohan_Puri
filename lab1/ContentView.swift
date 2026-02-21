@@ -2,6 +2,7 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var currentNumber: Int = 0
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -26,6 +27,10 @@ struct ContentView: View {
         }
         
         return true
+    }
+    
+    private func generateNewNumber() {
+        currentNumber = Int.random(in: 1...1000)
     }
 }
 
