@@ -1,9 +1,3 @@
-//
-//  ContentView.swift
-//  lab1
-//
-//  Created by xpydr on 2026-02-21.
-//
 
 import SwiftUI
 
