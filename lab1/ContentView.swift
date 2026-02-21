@@ -12,13 +12,45 @@ struct ContentView: View {
     @State private var countdownTimer: Timer? = nil
     
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack(spacing: 20) {
+            Text("Is \(currentNumber) prime?")
+            
+            if let feedback = feedback {
+                Image(systemName: feedback == "correct" ? "checkmark.circle.fill" : "xmark.circle.fill")
+            }
+
+            HStack(spacing: 40) {
+                Button {
+                    handleAnswer(isPrimeGuess: true)
+                } label: {
+                    Text("Prime")
+                }
+                .disabled(feedback != nil || showSummary)
+
+                Button {
+                    handleAnswer(isPrimeGuess: false)
+                } label: {
+                    Text("Not Prime")
+                }
+                .disabled(feedback != nil || showSummary)
+            }
         }
-        .padding()
+        .onAppear {
+            generateNewNumber()
+            startCountdown()
+        }
+        .alert("Performance Summary", isPresented: $showSummary) {
+            Button("OK") {
+                showSummary = false
+                if needsNewAfterAlert {
+                    generateNewNumber()
+                    startCountdown()
+                    needsNewAfterAlert = false
+                }
+            }
+        } message: {
+            Text("Correct: \(correctCount)\nWrong: \(wrongCount)")
+        }
     }
     
     private func isPrime(_ n: Int) -> Bool {
