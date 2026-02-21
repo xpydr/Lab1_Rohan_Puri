@@ -3,6 +3,12 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var currentNumber: Int = 0
+    @State private var feedback: String? = nil
+    @State private var correctCount: Int = 0
+    @State private var wrongCount: Int = 0
+    @State private var attemptCount: Int = 0
+    @State private var showSummary: Bool = false
+    @State private var needsNewAfterAlert: Bool = false
     @State private var countdownTimer: Timer? = nil
     
     var body: some View {
@@ -39,6 +45,18 @@ struct ContentView: View {
         countdownTimer?.invalidate()
         countdownTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
             handleTimeout()
+        }
+    }
+    
+    private func handleTimeout() {
+        wrongCount += 1
+        attemptCount += 1
+        if attemptCount % 10 == 0 {
+            showSummary = true
+            needsNewAfterAlert = true
+        } else {
+            generateNewNumber()
+            startCountdown()
         }
     }
 }
