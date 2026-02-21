@@ -1,4 +1,3 @@
-
 import SwiftUI
 
 struct ContentView: View {
@@ -12,27 +11,42 @@ struct ContentView: View {
     @State private var countdownTimer: Timer? = nil
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Is \(currentNumber) prime?")
-            
-            if let feedback = feedback {
-                Image(systemName: feedback == "correct" ? "checkmark.circle.fill" : "xmark.circle.fill")
+        ZStack {
+            VStack(spacing: 20) {
+                Text("Is \(currentNumber) prime?")
+                
+                if let feedback = feedback {
+                    Image(systemName: feedback == "correct" ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .font(.largeTitle)
+                }
+
+                HStack(spacing: 40) {
+                    Button {
+                        handleAnswer(isPrimeGuess: true)
+                    } label: {
+                        Text("Prime")
+                    }
+                    .disabled(feedback != nil || showSummary)
+
+                    Button {
+                        handleAnswer(isPrimeGuess: false)
+                    } label: {
+                        Text("Not Prime")
+                    }
+                    .disabled(feedback != nil || showSummary)
+                }
+                
+                Spacer()
             }
-
-            HStack(spacing: 40) {
-                Button {
-                    handleAnswer(isPrimeGuess: true)
-                } label: {
-                    Text("Prime")
+            
+            VStack {
+                Spacer()
+                HStack {
+                    Text("Attempt: \(attemptCount % 10)")
+                        .padding()
+                        .font(.footnote)
+                    Spacer()
                 }
-                .disabled(feedback != nil || showSummary)
-
-                Button {
-                    handleAnswer(isPrimeGuess: false)
-                } label: {
-                    Text("Not Prime")
-                }
-                .disabled(feedback != nil || showSummary)
             }
         }
         .onAppear {
@@ -42,6 +56,7 @@ struct ContentView: View {
         .alert("Performance Summary", isPresented: $showSummary) {
             Button("OK") {
                 showSummary = false
+                attemptCount = 0 // Reset attempt counter
                 if needsNewAfterAlert {
                     generateNewNumber()
                     startCountdown()
