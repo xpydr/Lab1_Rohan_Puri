@@ -59,6 +59,31 @@ struct ContentView: View {
             startCountdown()
         }
     }
+    
+    private func handleAnswer(isPrimeGuess: Bool) {
+        countdownTimer?.invalidate()
+        let actualIsPrime = isPrime(currentNumber)
+        let correct = (actualIsPrime == isPrimeGuess)
+        if correct {
+            correctCount += 1
+            feedback = "correct"
+        } else {
+            wrongCount += 1
+            feedback = "wrong"
+        }
+        attemptCount += 1
+        if attemptCount % 10 == 0 {
+            showSummary = true
+            needsNewAfterAlert = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.feedback = nil
+            if !self.showSummary {
+                generateNewNumber()
+                startCountdown()
+            }
+        }
+    }
 }
 
 #Preview {
