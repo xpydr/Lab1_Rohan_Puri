@@ -3,6 +3,8 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var currentNumber: Int = 0
+    @State private var countdownTimer: Timer? = nil
+    
     var body: some View {
         VStack {
             Image(systemName: "globe")
@@ -31,6 +33,13 @@ struct ContentView: View {
     
     private func generateNewNumber() {
         currentNumber = Int.random(in: 1...1000)
+    }
+    
+    private func startCountdown() {
+        countdownTimer?.invalidate()
+        countdownTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in
+            handleTimeout()
+        }
     }
 }
 
