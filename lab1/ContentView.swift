@@ -42,7 +42,7 @@ struct ContentView: View {
             VStack {
                 Spacer()
                 HStack {
-                    Text("Attempt: \(attemptCount % 10)")
+                    Text("Attempt: \(attemptCount)")
                         .padding()
                         .font(.footnote)
                     Spacer()
@@ -56,7 +56,6 @@ struct ContentView: View {
         .alert("Performance Summary", isPresented: $showSummary) {
             Button("OK") {
                 showSummary = false
-                attemptCount = 0 // Reset attempt counter
                 if needsNewAfterAlert {
                     generateNewNumber()
                     startCountdown()
